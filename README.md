@@ -1,3 +1,7 @@
+### This fork
+
+Fixes `level` being ignored by AppInsightsTransport
+
 # diagnostic-channel
 
 ## What?

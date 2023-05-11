@@ -106,12 +106,14 @@ var winston3PatchFunction = function (originalWinston) {
             levels = arguments[0].levels;
         }
         var lastLevel;
-        for (var level in levels) {
-            if (levels.hasOwnProperty(level)) {
-                lastLevel = lastLevel === undefined || levels[level] > levels[lastLevel] ? level : lastLevel;
+        for (var level_1 in levels) {
+            if (levels.hasOwnProperty(level_1)) {
+                lastLevel = lastLevel === undefined || levels[level_1] > levels[lastLevel] ? level_1 : lastLevel;
             }
         }
-        this.add(new AppInsightsTransport(originalWinston, { level: lastLevel }));
+        // get level from createLogger opts or use default
+        var level = arguments[0].level || lastLevel;
+        this.add(new AppInsightsTransport(originalWinston, { level: level }));
     }
     var origCreate = originalWinston.createLogger;
     originalWinston.createLogger = function patchedCreate() {
@@ -121,9 +123,9 @@ var winston3PatchFunction = function (originalWinston) {
             levels = arguments[0].levels;
         }
         var lastLevel;
-        for (var level_1 in levels) {
-            if (levels.hasOwnProperty(level_1)) {
-                lastLevel = lastLevel === undefined || levels[level_1] > levels[lastLevel] ? level_1 : lastLevel;
+        for (var level_2 in levels) {
+            if (levels.hasOwnProperty(level_2)) {
+                lastLevel = lastLevel === undefined || levels[level_2] > levels[lastLevel] ? level_2 : lastLevel;
             }
         }
         // Add custom app insights transport to the end

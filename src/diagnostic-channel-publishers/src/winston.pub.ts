@@ -96,8 +96,9 @@ const winston3PatchFunction: PatchFunction = (originalWinston) => {
                 lastLevel = lastLevel === undefined || levels[level] > levels[lastLevel] ? level : lastLevel;
             }
         }
-
-        this.add(new AppInsightsTransport(originalWinston, { level: lastLevel }));
+        // get level from createLogger opts or use default
+        const level = arguments[0].level || lastLevel;
+        this.add(new AppInsightsTransport(originalWinston, { level }));
     }
 
     const origCreate = originalWinston.createLogger;
