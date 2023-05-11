@@ -96,6 +96,7 @@ const winston3PatchFunction: PatchFunction = (originalWinston) => {
                 lastLevel = lastLevel === undefined || levels[level] > levels[lastLevel] ? level : lastLevel;
             }
         }
+
         this.add(new AppInsightsTransport(originalWinston, { level: lastLevel }));
     }
 
@@ -120,7 +121,10 @@ const winston3PatchFunction: PatchFunction = (originalWinston) => {
         // again after createLogger, but that would cause configure to be called
         // twice per create.
         const result = origCreate.apply(this, arguments);
-        result.add(new AppInsightsTransport(originalWinston, { level: lastLevel }));
+
+        // get level from createLogger opts or use default
+        const level = arguments[0].level || lastLevel;
+        result.add(new AppInsightsTransport(originalWinston, { level }));
 
         const origConfigure = result.configure;
         result.configure = function() {
